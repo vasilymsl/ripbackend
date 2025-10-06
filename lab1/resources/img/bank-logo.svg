@@ -1,0 +1,23 @@
+<svg width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+  <!-- Фон круга -->
+  <circle cx="50" cy="50" r="48" fill="#101B50" stroke="#FFFFFF" stroke-width="2"/>
+  
+  <!-- Здание банка -->
+  <g fill="#FFFFFF">
+    <!-- Крыша/треугольник -->
+    <path d="M 25 40 L 50 25 L 75 40 Z"/>
+    
+    <!-- Колонны -->
+    <rect x="30" y="42" width="6" height="25" rx="1"/>
+    <rect x="42" y="42" width="6" height="25" rx="1"/>
+    <rect x="54" y="42" width="6" height="25" rx="1"/>
+    <rect x="66" y="42" width="6" height="25" rx="1"/>
+    
+    <!-- Основание -->
+    <rect x="25" y="68" width="50" height="5" rx="1"/>
+    
+    <!-- Символ денег -->
+    <circle cx="50" cy="35" r="5" fill="#FFD700"/>
+    <text x="50" y="39" font-family="Arial, sans-serif" font-size="8" font-weight="bold" fill="#101B50" text-anchor="middle">₽</text>
+  </g>
+</svg>
