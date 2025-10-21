@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Банк</title>
+    <link rel="stylesheet" href="/static/styles/index_style.css?v=2">
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <a href="/" class="logo-link">
+                <img src="/static/img/bank-logo.svg" alt="Банк" class="logo">
+            </a>
+            <h1>Банк</h1>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="search-container">
+            <form action="/credit-services" method="GET" class="search-form">
+                <input type="text" name="query" placeholder="Поиск" value="{{ .query }}" class="search-input">
+                <button type="submit" class="search-button">Найти</button>
+            </form>
+            <a href="/creditapplicationbasket" class="btn-applications">Заявка</a>
+        </div>
+
+        <div class="products-list">
+            {{ range .orders }}
+            <div class="product-card">
+                <div class="product-icon-img">
+                    <img src="{{ .ImageURL }}" alt="{{ .Title }}" class="credit-image">
+                </div>
+                <div class="product-info">
+                    <h2 class="product-title">{{ .Title }}</h2>
+                    {{ if .Rate }}<p class="product-feature">• {{ .Rate }}</p>{{ end }}
+                    {{ if .Term }}<p class="product-feature">• {{ .Term }}</p>{{ end }}
+                    {{ if .Amount }}<p class="product-feature">• {{ .Amount }}</p>{{ end }}
+                    {{ if .Feature1 }}<p class="product-feature">• {{ .Feature1 }}</p>{{ end }}
+                    {{ if .Feature2 }}<p class="product-feature">• {{ .Feature2 }}</p>{{ end }}
+                    {{ if .Feature3 }}<p class="product-feature">• {{ .Feature3 }}</p>{{ end }}
+                </div>
+                <div class="product-actions">
+                    <a href="/credit/{{ .ID }}" class="btn-details">Подробнее</a>
+                </div>
+            </div>
+            {{ end }}
+        </div>
+    </div>
+</body>
+</html>

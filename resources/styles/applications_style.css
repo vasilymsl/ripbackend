@@ -1,0 +1,232 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+    background: #F5F6FA;
+    min-height: 100vh;
+}
+
+header {
+    background: rgba(52, 67, 118, 0.95);
+    padding: 15px 0;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.header-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 40px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.logo-link {
+    text-decoration: none;
+    display: inline-block;
+    cursor: pointer;
+}
+
+.logo {
+    width: 60px;
+    height: 60px;
+    object-fit: contain;
+    display: block;
+}
+
+header h1 {
+    font-size: 42px;
+    font-weight: 400;
+    color: #FFFFFF;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 50px 60px;
+}
+
+.title-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 60px;
+}
+
+.page-title {
+    font-size: 32px;
+    font-weight: 500;
+    color: #000000;
+}
+
+.btn-delete {
+    padding: 18px 35px;
+    font-size: 22px;
+    background: #D64037;
+    color: #FFFFFF;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: 400;
+    transition: background 0.2s;
+}
+
+.btn-delete:hover {
+    background: #bf3830;
+}
+
+.borrower-section {
+    margin-bottom: 70px;
+}
+
+.section-title {
+    font-size: 28px;
+    font-weight: 500;
+    margin-bottom: 35px;
+    color: #000000;
+}
+
+.info-fields {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+    max-width: 900px;
+}
+
+.info-field {
+    background: #D9D9D9;
+    border: 1px solid rgba(0, 0, 0, 0.66);
+    border-radius: 10px;
+    padding: 20px 25px;
+}
+
+.field-label {
+    font-size: 20px;
+    color: #6B6B6B;
+    font-weight: 400;
+    margin-bottom: 5px;
+}
+
+.field-value {
+    font-size: 20px;
+    color: #000000;
+    font-weight: 400;
+}
+
+.product-table {
+    background: #FFFFFF;
+    border-radius: 12px;
+    box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.12);
+    overflow: hidden;
+}
+
+.table-header {
+    display: grid;
+    grid-template-columns: 2.5fr 2.5fr 2fr;
+    background: #F5F5F5;
+    border-bottom: 2px solid #E0E0E0;
+}
+
+.header-cell {
+    padding: 28px 40px;
+    font-size: 24px;
+    font-weight: 600;
+    color: #000000;
+    display: flex;
+    align-items: center;
+}
+
+.header-cell:nth-child(1) {
+    justify-content: center;
+}
+
+.header-cell:nth-child(2) {
+    justify-content: center;
+}
+
+.header-cell:nth-child(3) {
+    justify-content: center;
+}
+
+.product-row {
+    display: grid;
+    grid-template-columns: 2.5fr 2.5fr 2fr;
+    align-items: center;
+    padding: 35px 0;
+    min-height: 180px;
+    border-bottom: 1px solid #E8E8E8;
+}
+
+.product-row:last-child {
+    border-bottom: none;
+}
+
+.product-info {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    padding: 0 20px;
+}
+
+.product-icon-wrapper {
+    width: 140px;
+    height: 140px;
+    background: #F0F0F0;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+.product-icon {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.product-name {
+    font-size: 20px;
+    font-weight: 500;
+    color: #000000;
+    line-height: 1.4;
+    text-align: left;
+    flex: 1;
+}
+
+.product-conditions {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    padding: 0 40px;
+    justify-content: center;
+    align-items: flex-start;
+    width: 100%;
+}
+
+.product-conditions p {
+    font-size: 18px;
+    color: #000000;
+    line-height: 1.6;
+    margin: 0;
+    text-align: left;
+    width: 100%;
+}
+
+.product-payment {
+    font-size: 20px;
+    font-weight: 400;
+    color: #000000;
+    text-align: center;
+    padding: 0 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

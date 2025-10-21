@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Заявка - Банк</title>
+    <link rel="stylesheet" href="/static/styles/applications_style.css?v=6">
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <a href="/" class="logo-link">
+                <img src="/static/img/bank-logo.svg" alt="Банк" class="logo">
+            </a>
+            <h1>Банк</h1>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="title-row">
+            <h1 class="page-title">Заявка {{.application.ID}}</h1>
+            <button class="btn-delete" onclick="deleteApplication()">Удалить заявку</button>
+        </div>
+        
+        <div class="borrower-section">
+            <h2 class="section-title">Данные заёмщика:</h2>
+            
+            <div class="info-fields">
+                <div class="info-field">
+                    <div class="field-label">ФИО:</div>
+                    <div class="field-value">{{.application.FullName}}</div>
+                </div>
+                
+                <div class="info-field">
+                    <div class="field-label">Доход/мес:</div>
+                    <div class="field-value">{{.application.Income}}</div>
+                </div>
+                
+                <div class="info-field">
+                    <div class="field-label">Обязательства/мес:</div>
+                    <div class="field-value">{{.application.Obligations}}</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="product-table">
+            <div class="table-header">
+                <div class="header-cell">Название</div>
+                <div class="header-cell">Условия</div>
+                <div class="header-cell">Ежемесячный<br>платеж</div>
+            </div>
+            
+            {{ range .application.Products }}
+            <div class="product-row">
+                <div class="product-info">
+                    <div class="product-icon-wrapper">
+                        <img src="{{.Order.ImageURL}}" alt="{{.Order.Title}}" class="product-icon">
+                    </div>
+                    <div class="product-name">{{.Order.Title}}</div>
+                </div>
+                
+                <div class="product-conditions">
+                    <p>• {{.Order.Rate}}</p>
+                    <p>• {{.Order.Term}}</p>
+                    <p>• {{.Order.Amount}}</p>
+                </div>
+                
+                <div class="product-payment">
+                    {{.MonthlyPayment}}
+                </div>
+            </div>
+            {{ end }}
+        </div>
+    </div>
+
+    <script>
+        function deleteApplication() {
+            if (confirm('Вы уверены, что хотите удалить эту заявку?')) {
+                window.location.href = '/';
+            }
+        }
+    </script>
+</body>
+</html>
+

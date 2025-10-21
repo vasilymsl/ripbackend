@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ .order.Title }} - Банк</title>
+    <link rel="stylesheet" href="/static/styles/order_style.css?v=2">
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <a href="/" class="logo-link">
+                <img src="/static/img/bank-logo.svg" alt="Банк" class="logo">
+            </a>
+            <h1>Банк</h1>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="product-detail">
+            <div class="product-header">
+                <div class="product-icon-large-img">
+                    <img src="{{ .order.ImageURL }}" alt="{{ .order.Title }}" class="credit-image-large">
+                </div>
+                <div class="product-main-info">
+                    <h1 class="product-title-large">{{ .order.Title }}</h1>
+                    {{ if .order.Rate }}<p class="product-feature-large">• {{ .order.Rate }}</p>{{ end }}
+                    {{ if .order.Term }}<p class="product-feature-large">• {{ .order.Term }}</p>{{ end }}
+                    {{ if .order.Amount }}<p class="product-feature-large">• {{ .order.Amount }}</p>{{ end }}
+                    {{ if .order.Feature1 }}<p class="product-feature-large">• {{ .order.Feature1 }}</p>{{ end }}
+                    {{ if .order.Feature2 }}<p class="product-feature-large">• {{ .order.Feature2 }}</p>{{ end }}
+                    {{ if .order.Feature3 }}<p class="product-feature-large">• {{ .order.Feature3 }}</p>{{ end }}
+                </div>
+            </div>
+
+            {{ if .order.Description }}
+            <div class="product-description">
+                <h2>Описание:</h2>
+                <p>{{ .order.Description }}</p>
+            </div>
+            {{ end }}
+        </div>
+    </div>
+</body>
+</html>
