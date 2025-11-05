@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Банк</title>
+    <link rel="stylesheet" href="/static/styles/index_style.css?v=14">
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <a href="/" class="logo-link">
+                <img src="/static/img/bank-logo.svg" alt="Банк" class="logo">
+            </a>
+            <h1>Банк</h1>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="search-container">
+            <form action="/credit-services" method="GET" class="search-form">
+                <input type="text" name="query" placeholder="Поиск" value="{{ .query }}" class="search-input">
+                <button type="submit" class="search-button">Найти</button>
+            </form>
+            <a href="/creditapplicationbasket" class="btn-applications-cart">
+                <svg class="cart-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M9 2L7 8H21L19 2H9Z"/>
+                    <path d="M7 8L5 22H19L21 8"/>
+                    <circle cx="9" cy="22" r="1"/>
+                    <circle cx="19" cy="22" r="1"/>
+                    <path d="M7 8H21M9 12H19M10 16H18"/>
+                </svg>
+                <span class="cart-label">Корзина</span>
+                {{ if .cart_count }}
+                <span class="cart-badge">{{ .cart_count }}</span>
+                {{ end }}
+            </a>
+        </div>
+
+        <div class="products-list">
+            {{ range .orders }}
+            <div class="product-card-horizontal">
+                <div class="product-icon-wrapper">
+                    <img src="{{ .ImageURL }}" alt="{{ .Title }}" class="product-icon-small">
+                </div>
+                <div class="product-content">
+                    <h2 class="product-title-horizontal">{{ .Title }}</h2>
+                    <div class="product-features-horizontal">
+                        {{ if .Rate }}<p class="product-feature-item">• {{ .Rate }}</p>{{ end }}
+                        {{ if .Term }}<p class="product-feature-item">• {{ .Term }}</p>{{ end }}
+                        {{ if .Amount }}<p class="product-feature-item">• {{ .Amount }}</p>{{ end }}
+                    </div>
+                </div>
+                <div class="product-actions-horizontal">
+                    <a href="/credit/{{ .ID }}" class="btn-details-horizontal">Подробнее</a>
+                    <form action="/add-to-application" method="POST" style="display:inline;">
+                        <input type="hidden" name="credit_id" value="{{ .ID }}">
+                        <button type="submit" class="btn-add-horizontal">Добавить в заявку</button>
+                    </form>
+                </div>
+            </div>
+            {{ end }}
+        </div>
+    </div>
+</body>
+</html>

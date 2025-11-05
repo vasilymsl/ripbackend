@@ -1,0 +1,326 @@
+{
+  "_type": "export",
+  "__export_format": 4,
+  "__export_date": "2025-10-22T00:00:00.000Z",
+  "__export_source": "insomnia.desktop.app:v2023.5.8",
+  "resources": [
+    {
+      "_id": "wrk_lab3",
+      "parentId": null,
+      "_type": "workspace",
+      "name": "Lab3 - Credits API",
+      "description": "REST API для системы кредитных заявок - Лабораторная работа №3"
+    },
+    {
+      "_id": "env_base",
+      "parentId": "wrk_lab3",
+      "_type": "environment",
+      "name": "Base Environment",
+      "data": {
+        "base_url": "http://localhost:8080/api",
+        "test_credit_id": "1",
+        "test_app_id": "",
+        "auth_token": ""
+      }
+    },
+    {
+      "_id": "fld_users",
+      "parentId": "wrk_lab3",
+      "_type": "request_group",
+      "name": "1. Users (Пользователи)",
+      "description": "5 методов для работы с пользователями"
+    },
+    {
+      "_id": "req_register",
+      "parentId": "fld_users",
+      "_type": "request",
+      "name": "1.1 POST Register User",
+      "method": "POST",
+      "url": "{{ _.base_url }}/users/register",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"username\": \"testuser\",\n  \"password\": \"password123\",\n  \"email\": \"test@example.com\",\n  \"full_name\": \"Тестовый Пользователь\",\n  \"phone\": \"+7 900 123-45-67\"\n}"
+      }
+    },
+    {
+      "_id": "req_login",
+      "parentId": "fld_users",
+      "_type": "request",
+      "name": "1.2 POST Login User",
+      "method": "POST",
+      "url": "{{ _.base_url }}/users/login",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"username\": \"testuser\",\n  \"password\": \"password123\"\n}"
+      }
+    },
+    {
+      "_id": "req_profile",
+      "parentId": "fld_users",
+      "_type": "request",
+      "name": "1.3 GET User Profile",
+      "method": "GET",
+      "url": "{{ _.base_url }}/users/profile"
+    },
+    {
+      "_id": "req_update_profile",
+      "parentId": "fld_users",
+      "_type": "request",
+      "name": "1.4 PUT Update User Profile",
+      "method": "PUT",
+      "url": "{{ _.base_url }}/users/profile",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"full_name\": \"Обновленное Имя\",\n  \"phone\": \"+7 911 999-88-77\"\n}"
+      }
+    },
+    {
+      "_id": "req_logout",
+      "parentId": "fld_users",
+      "_type": "request",
+      "name": "1.5 POST Logout User",
+      "method": "POST",
+      "url": "{{ _.base_url }}/users/logout"
+    },
+    {
+      "_id": "fld_credits",
+      "parentId": "wrk_lab3",
+      "_type": "request_group",
+      "name": "2. Credits (Услуги)",
+      "description": "7 методов для работы с кредитными продуктами"
+    },
+    {
+      "_id": "req_get_credits",
+      "parentId": "fld_credits",
+      "_type": "request",
+      "name": "2.1 GET All Credits (with filter)",
+      "method": "GET",
+      "url": "{{ _.base_url }}/credits",
+      "parameters": [
+        {
+          "name": "title",
+          "value": "кредит",
+          "disabled": false
+        }
+      ]
+    },
+    {
+      "_id": "req_get_credit",
+      "parentId": "fld_credits",
+      "_type": "request",
+      "name": "2.2 GET Credit by ID",
+      "method": "GET",
+      "url": "{{ _.base_url }}/credits/{{ _.test_credit_id }}"
+    },
+    {
+      "_id": "req_create_credit",
+      "parentId": "fld_credits",
+      "_type": "request",
+      "name": "2.3 POST Create Credit",
+      "method": "POST",
+      "url": "{{ _.base_url }}/credits",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"title\": \"Тестовый кредит для ЛР3\",\n  \"type\": \"consumer\",\n  \"percent\": 15.5,\n  \"sum_from\": 50000,\n  \"sum_to\": 500000,\n  \"term_from\": 12,\n  \"term_to\": 60,\n  \"description\": \"Описание тестового кредита для лабораторной работы\",\n  \"feature1\": \"Быстрое одобрение\",\n  \"feature2\": \"Без справок\",\n  \"feature3\": \"Онлайн оформление\"\n}"
+      }
+    },
+    {
+      "_id": "req_update_credit",
+      "parentId": "fld_credits",
+      "_type": "request",
+      "name": "2.4 PUT Update Credit",
+      "method": "PUT",
+      "url": "{{ _.base_url }}/credits/{{ _.test_credit_id }}",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"title\": \"Обновленный кредит\",\n  \"percent\": 12.0,\n  \"description\": \"Обновленное описание кредита\"\n}"
+      }
+    },
+    {
+      "_id": "req_upload_image",
+      "parentId": "fld_credits",
+      "_type": "request",
+      "name": "2.5 POST Upload Credit Image",
+      "method": "POST",
+      "url": "{{ _.base_url }}/credits/{{ _.test_credit_id }}/image",
+      "body": {
+        "mimeType": "multipart/form-data",
+        "params": [
+          {
+            "name": "image",
+            "value": "",
+            "description": "Выберите файл изображения",
+            "type": "file"
+          }
+        ]
+      }
+    },
+    {
+      "_id": "req_add_to_app",
+      "parentId": "fld_credits",
+      "_type": "request",
+      "name": "2.6 POST Add Credit to Application",
+      "method": "POST",
+      "url": "{{ _.base_url }}/credits/{{ _.test_credit_id }}/add-to-application"
+    },
+    {
+      "_id": "req_delete_credit",
+      "parentId": "fld_credits",
+      "_type": "request",
+      "name": "2.7 DELETE Credit",
+      "method": "DELETE",
+      "url": "{{ _.base_url }}/credits/{{ _.test_credit_id }}"
+    },
+    {
+      "_id": "fld_applications",
+      "parentId": "wrk_lab3",
+      "_type": "request_group",
+      "name": "3. Applications (Заявки)",
+      "description": "7 методов для работы с заявками"
+    },
+    {
+      "_id": "req_basket",
+      "parentId": "fld_applications",
+      "_type": "request",
+      "name": "3.1 GET Basket Icon",
+      "method": "GET",
+      "url": "{{ _.base_url }}/applications/basket"
+    },
+    {
+      "_id": "req_get_apps",
+      "parentId": "fld_applications",
+      "_type": "request",
+      "name": "3.2 GET All Applications (with filters)",
+      "method": "GET",
+      "url": "{{ _.base_url }}/applications",
+      "parameters": [
+        {
+          "name": "status",
+          "value": "formed",
+          "disabled": false
+        },
+        {
+          "name": "date_from",
+          "value": "2025-01-01",
+          "disabled": false
+        },
+        {
+          "name": "date_to",
+          "value": "2025-12-31",
+          "disabled": false
+        }
+      ]
+    },
+    {
+      "_id": "req_get_app",
+      "parentId": "fld_applications",
+      "_type": "request",
+      "name": "3.3 GET Application by ID",
+      "method": "GET",
+      "url": "{{ _.base_url }}/applications/{{ _.test_app_id }}"
+    },
+    {
+      "_id": "req_update_app",
+      "parentId": "fld_applications",
+      "_type": "request",
+      "name": "3.4 PUT Update Application Fields",
+      "method": "PUT",
+      "url": "{{ _.base_url }}/applications/{{ _.test_app_id }}",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"full_name\": \"Иванов Иван Иванович\",\n  \"income\": 120000,\n  \"obligations\": 25000\n}"
+      }
+    },
+    {
+      "_id": "req_form_app",
+      "parentId": "fld_applications",
+      "_type": "request",
+      "name": "3.5 PUT Form Application",
+      "method": "PUT",
+      "url": "{{ _.base_url }}/applications/{{ _.test_app_id }}/form"
+    },
+    {
+      "_id": "req_complete_app",
+      "parentId": "fld_applications",
+      "_type": "request",
+      "name": "3.6 PUT Complete Application",
+      "method": "PUT",
+      "url": "{{ _.base_url }}/applications/{{ _.test_app_id }}/complete",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"action\": \"complete\"\n}"
+      }
+    },
+    {
+      "_id": "req_delete_app",
+      "parentId": "fld_applications",
+      "_type": "request",
+      "name": "3.7 DELETE Application",
+      "method": "DELETE",
+      "url": "{{ _.base_url }}/applications/{{ _.test_app_id }}"
+    },
+    {
+      "_id": "fld_products",
+      "parentId": "wrk_lab3",
+      "_type": "request_group",
+      "name": "4. Application Products (М-М)",
+      "description": "2 метода для работы с М-М связью"
+    },
+    {
+      "_id": "req_update_product",
+      "parentId": "fld_products",
+      "_type": "request",
+      "name": "4.1 PUT Update Application Product",
+      "method": "PUT",
+      "url": "{{ _.base_url }}/application-products/{{ _.test_app_id }}/{{ _.test_credit_id }}",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"requested_amount\": 150000,\n  \"requested_term_days\": 1080,\n  \"monthly_payment\": 15000,\n  \"interest_rate\": 17.5\n}"
+      }
+    },
+    {
+      "_id": "req_delete_product",
+      "parentId": "fld_products",
+      "_type": "request",
+      "name": "4.2 DELETE Remove Product from Application",
+      "method": "DELETE",
+      "url": "{{ _.base_url }}/application-products/{{ _.test_app_id }}/{{ _.test_credit_id }}"
+    },
+    {
+      "_id": "fld_tests",
+      "parentId": "wrk_lab3",
+      "_type": "request_group",
+      "name": "5. Test Scenarios (Краевые случаи)",
+      "description": "Тесты на обработку ошибок"
+    },
+    {
+      "_id": "req_test_invalid",
+      "parentId": "fld_tests",
+      "_type": "request",
+      "name": "5.1 Test Bad Request - Invalid ID",
+      "method": "GET",
+      "url": "{{ _.base_url }}/credits/invalid_id"
+    },
+    {
+      "_id": "req_test_notfound",
+      "parentId": "fld_tests",
+      "_type": "request",
+      "name": "5.2 Test Not Found - ID 999999",
+      "method": "GET",
+      "url": "{{ _.base_url }}/credits/999999"
+    },
+    {
+      "_id": "req_test_empty",
+      "parentId": "fld_tests",
+      "_type": "request",
+      "name": "5.3 Test Bad Request - Empty Field",
+      "method": "POST",
+      "url": "{{ _.base_url }}/credits",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"icon\": \"test\"\n}"
+      }
+    }
+  ]
+}
+
