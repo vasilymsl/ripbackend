@@ -18,9 +18,10 @@ import (
 
 // MinioService - сервис для работы с MinIO
 type MinioService struct {
-	client     *minio.Client
-	bucketName string
-	endpoint   string
+	client         *minio.Client
+	bucketName     string
+	endpoint       string
+	publicEndpoint string
 }
 
 // NewMinioService создает новый экземпляр MinIO сервиса
@@ -34,10 +35,17 @@ func NewMinioService(cfg config.Minio) (*MinioService, error) {
 		return nil, fmt.Errorf("failed to create minio client: %w", err)
 	}
 
+	// Используем публичный endpoint если он указан, иначе обычный
+	publicEndpoint := cfg.PublicEndpoint
+	if publicEndpoint == "" {
+		publicEndpoint = cfg.Endpoint
+	}
+
 	service := &MinioService{
-		client:     minioClient,
-		bucketName: cfg.BucketName,
-		endpoint:   cfg.Endpoint,
+		client:         minioClient,
+		bucketName:     cfg.BucketName,
+		endpoint:       cfg.Endpoint,
+		publicEndpoint: publicEndpoint,
 	}
 
 	// Создаем bucket если его нет
@@ -144,8 +152,11 @@ func (s *MinioService) GetFileURL(folder, fileName string) string {
 	if fileName == "" {
 		return ""
 	}
-	objectName := fmt.Sprintf("%s/%s", folder, fileName)
-	return fmt.Sprintf("http://%s/%s/%s", s.endpoint, s.bucketName, objectName)
+	objectName := fileName
+	if folder != "" {
+		objectName = fmt.Sprintf("%s/%s", folder, fileName)
+	}
+	return fmt.Sprintf("http://%s/%s/%s", s.publicEndpoint, s.bucketName, objectName)
 }
 
 // GetPresignedURL возвращает временную предподписанную ссылку на файл

@@ -133,6 +133,7 @@ func (r *Repository) UpdateApplication(app *ds.Application) error {
 }
 
 // FormApplication формирует заявку (меняет статус на formed)
+// При формировании выполняется оценка кредитоспособности по скоринговой модели
 func (r *Repository) FormApplication(appID int, userID int) error {
 	// Получаем заявку
 	app, err := r.GetApplicationByID(appID)
@@ -158,11 +159,25 @@ func (r *Repository) FormApplication(appID int, userID int) error {
 		return fmt.Errorf("application must have at least one product")
 	}
 
-	// Формируем заявку
+	// Рассчитываем суммарный ежемесячный платеж по всем кредитам
+	totalMonthlyPayment := float64(0)
+	for _, product := range app.Products {
+		totalMonthlyPayment += product.MonthlyPayment
+	}
+
+	// Выполняем оценку кредитоспособности по скоринговой модели
+	scoringResult := ds.CalculateCreditworthiness(app.Income, app.Obligations, totalMonthlyPayment)
+
+	// Формируем заявку с результатами скоринга
 	now := time.Now()
 	return r.db.Model(&ds.Application{}).Where("id = ?", appID).Updates(map[string]interface{}{
-		"status":    ds.ApplicationStatusFormed,
-		"formed_at": now,
+		"status":            ds.ApplicationStatusFormed,
+		"formed_at":         now,
+		"credit_score":      scoringResult.CreditScore,
+		"scoring_result":    scoringResult.Result,
+		"max_credit_amount": scoringResult.MaxCreditAmount,
+		"rejection_reason":  scoringResult.RejectionReason,
+		"total_amount":      totalMonthlyPayment,
 	}).Error
 }
 

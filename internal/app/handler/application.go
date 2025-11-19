@@ -9,7 +9,7 @@ import (
 )
 
 func (h *Handler) GetApplications(ctx *gin.Context) {
-	idStr := ctx.Param("id") // получаем id заявки из урла (то есть из /creditapplicationbasket/:id)
+	idStr := ctx.Param("id") // получаем id заявки из урла (то есть из /scoringapplicationbasket/:id)
 
 	if idStr != "" {
 		// Если указан конкретный ID
@@ -28,6 +28,14 @@ func (h *Handler) GetApplications(ctx *gin.Context) {
 			})
 			return
 		}
+		// Заполняем поля для таблицы (короткие значения)
+		for i := range appPtr.Products {
+			appPtr.Products[i].Order.PopulateForTable()
+			// Формируем полный URL изображения из MinIO
+			if appPtr.Products[i].Order.Icon != "" {
+				appPtr.Products[i].Order.ImageURL = h.MinioService.GetFileURL("", appPtr.Products[i].Order.Icon)
+			}
+		}
 		ctx.HTML(http.StatusOK, "applications.html", gin.H{
 			"application": *appPtr,
 		})
@@ -42,6 +50,15 @@ func (h *Handler) GetApplications(ctx *gin.Context) {
 			"message": "Корзина пуста. Добавьте услугу!",
 		})
 		return
+	}
+
+	// Заполняем поля для таблицы (короткие значения)
+	for i := range draft.Products {
+		draft.Products[i].Order.PopulateForTable()
+		// Формируем полный URL изображения из MinIO
+		if draft.Products[i].Order.Icon != "" {
+			draft.Products[i].Order.ImageURL = h.MinioService.GetFileURL("", draft.Products[i].Order.Icon)
+		}
 	}
 
 	ctx.HTML(http.StatusOK, "applications.html", gin.H{

@@ -2,7 +2,9 @@ package config
 
 import (
 	"os"
+	"time"
 
+	"github.com/golang-jwt/jwt/v5"
 	"github.com/joho/godotenv"
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
@@ -13,6 +15,8 @@ type Config struct {
 	ServicePort int
 	Database    Database
 	Minio       Minio
+	JWT         JWT
+	Redis       Redis
 }
 
 type Database struct {
@@ -25,11 +29,27 @@ type Database struct {
 }
 
 type Minio struct {
-	Endpoint   string
-	AccessKey  string `mapstructure:"access_key"`
-	SecretKey  string `mapstructure:"secret_key"`
-	UseSSL     bool   `mapstructure:"use_ssl"`
-	BucketName string `mapstructure:"bucket_name"`
+	Endpoint       string
+	PublicEndpoint string `mapstructure:"public_endpoint"`
+	AccessKey      string `mapstructure:"access_key"`
+	SecretKey      string `mapstructure:"secret_key"`
+	UseSSL         bool   `mapstructure:"use_ssl"`
+	BucketName     string `mapstructure:"bucket_name"`
+}
+
+type JWT struct {
+	SecretKey     string        `mapstructure:"secret_key"`
+	ExpiresIn     time.Duration `mapstructure:"expires_in"` // время жизни токена
+	SigningMethod jwt.SigningMethod
+}
+
+type Redis struct {
+	Host        string        `mapstructure:"host"`
+	Port        int           `mapstructure:"port"`
+	Password    string        `mapstructure:"password"`
+	DB          int           `mapstructure:"db"`
+	DialTimeout time.Duration `mapstructure:"dial_timeout"`
+	ReadTimeout time.Duration `mapstructure:"read_timeout"`
 }
 
 func NewConfig() (*Config, error) {
@@ -57,6 +77,20 @@ func NewConfig() (*Config, error) {
 	// конвертируем и затем кладем в нашу переменную cfg
 	if err != nil {
 		return nil, err
+	}
+
+	// Устанавливаем метод подписи JWT (по умолчанию HS256)
+	cfg.JWT.SigningMethod = jwt.SigningMethodHS256
+
+	// Устанавливаем значения по умолчанию, если не указаны
+	if cfg.JWT.ExpiresIn == 0 {
+		cfg.JWT.ExpiresIn = 24 * time.Hour // 24 часа по умолчанию
+	}
+	if cfg.Redis.DialTimeout == 0 {
+		cfg.Redis.DialTimeout = 10 * time.Second
+	}
+	if cfg.Redis.ReadTimeout == 0 {
+		cfg.Redis.ReadTimeout = 10 * time.Second
 	}
 
 	log.Info("config parsed")

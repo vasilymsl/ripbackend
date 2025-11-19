@@ -31,6 +31,10 @@ func (h *Handler) GetOrders(ctx *gin.Context) {
 	// Заполняем поля совместимости для шаблонов
 	for i := range orders {
 		orders[i].PopulateCompatibilityFields()
+		// Формируем полный URL изображения из MinIO
+		if orders[i].Icon != "" {
+			orders[i].ImageURL = h.MinioService.GetFileURL("", orders[i].Icon)
+		}
 	}
 
 	// Получаем количество товаров в корзине
@@ -49,7 +53,7 @@ func (h *Handler) GetOrders(ctx *gin.Context) {
 }
 
 func (h *Handler) GetOrder(ctx *gin.Context) {
-	idStr := ctx.Param("id") // получаем id заказа из урла (то есть из /credit/:id)
+	idStr := ctx.Param("id") // получаем id заказа из урла (то есть из /scoringmodel/:id)
 	// через двоеточие мы указываем параметры, которые потом сможем считать через функцию выше
 	id, err := strconv.Atoi(idStr) // так как функция выше возвращает нам строку, нужно ее преобразовать в int
 	if err != nil {
@@ -63,6 +67,11 @@ func (h *Handler) GetOrder(ctx *gin.Context) {
 
 	// Заполняем поля совместимости для шаблона
 	order.PopulateCompatibilityFields()
+	
+	// Формируем полный URL изображения из MinIO
+	if order.ImageURL != "" {
+		order.ImageURL = h.MinioService.GetFileURL("credits", order.ImageURL)
+	}
 
 	ctx.HTML(http.StatusOK, "order.html", gin.H{
 		"order": order,

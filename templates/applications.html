@@ -2,8 +2,8 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>Моя корзина - Банк</title>
-    <link rel="stylesheet" href="/static/styles/applications_style.css?v=14">
+    <title>Оценка кредитоспособности - Банк</title>
+    <link rel="stylesheet" href="/static/styles/applications_style.css?v=15">
 </head>
 <body>
     <header>
@@ -11,38 +11,38 @@
             <a href="/" class="logo-link">
                 <img src="/static/img/bank-logo.svg" alt="Банк" class="logo">
             </a>
-            <h1>Банк</h1>
+            <h1>Оценка кредитоспособности</h1>
         </div>
     </header>
 
     <div class="container">
         {{ if .application }}
         <div class="title-row">
-            <h1 class="page-title">Заявка {{.application.ID}}</h1>
+            <h1 class="page-title">Заявка на оценку кредитоспособности №{{.application.ID}}</h1>
             {{ if eq .application.Status "draft" }}
             <form action="/delete-application" method="POST" id="deleteForm" style="display:inline;">
                 <input type="hidden" name="application_id" value="{{.application.ID}}">
-                <button type="button" class="btn-delete" onclick="deleteApplication()">Очистить корзину</button>
+                <button type="button" class="btn-delete" onclick="deleteApplication()">Очистить заявку</button>
             </form>
             {{ end }}
         </div>
         
         <div class="borrower-section">
-            <h2 class="section-title">Данные заёмщика:</h2>
+            <h2 class="section-title">Данные для оценки кредитоспособности:</h2>
             
             <div class="info-fields">
                 <div class="info-field">
-                    <div class="field-label">ФИО:</div>
+                    <div class="field-label">ФИО заемщика:</div>
                     <div class="field-value">{{ if .application.FullName }}{{.application.FullName}}{{ else }}<em>Не указано</em>{{ end }}</div>
                 </div>
                 
                 <div class="info-field">
-                    <div class="field-label">Доход/мес:</div>
+                    <div class="field-label">Ежемесячный доход:</div>
                     <div class="field-value">{{ if gt .application.Income 0.0 }}{{ printf "%.2f ₽" .application.Income }}{{ else }}<em>Не указан</em>{{ end }}</div>
                 </div>
                 
                 <div class="info-field">
-                    <div class="field-label">Обязательства/мес:</div>
+                    <div class="field-label">Текущие обязательства/мес:</div>
                     <div class="field-value">{{ if gt .application.Obligations 0.0 }}{{ printf "%.2f ₽" .application.Obligations }}{{ else }}<em>Не указаны</em>{{ end }}</div>
                 </div>
             </div>
@@ -50,9 +50,9 @@
         
         <div class="product-table">
             <div class="table-header">
-                <div class="header-cell">Название</div>
-                <div class="header-cell">Условия</div>
-                <div class="header-cell">Ежемесячный<br>платеж</div>
+                <div class="header-cell">Услуга оценки</div>
+                <div class="header-cell">Точность</div>
+                <div class="header-cell">Срок расчета/внедрения</div>
             </div>
             
             {{ range .application.Products }}
@@ -65,30 +65,21 @@
                 </div>
                 
                 <div class="product-conditions">
-                    <p>• {{.Order.Rate}}</p>
-                    <p>• {{.Order.Term}}</p>
-                    <p>• {{.Order.Amount}}</p>
+                    {{.Order.Rate}}
                 </div>
                 
                 <div class="product-payment">
-                    {{ if gt .MonthlyPayment 0.0 }}{{ printf "%.2f ₽/мес" .MonthlyPayment }}{{ else }}<em>Расчет при формировании</em>{{ end }}
+                    {{.Order.Term}}
                 </div>
             </div>
             {{ end }}
-        </div>
-
-        <div class="result-section">
-            <h3 class="result-title">Итого:</h3>
-            <div class="result-value">
-                Сумма по всем кредитам: <strong>{{ printf "%.2f" .application.TotalAmount }} ₽</strong>
-            </div>
         </div>
     </div>
 
         {{ else }}
         <div class="message">
             <h2>{{ .message }}</h2>
-            <p><a href="/">Перейти к выбору кредитов</a></p>
+            <p><a href="/">Перейти к выбору услуг</a></p>
         </div>
         {{ end }}
         {{ if .error }}
@@ -108,4 +99,5 @@
     </script>
 </body>
 </html>
+
 

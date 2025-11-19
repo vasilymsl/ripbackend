@@ -29,10 +29,9 @@ CREATE TABLE IF NOT EXISTS credits (
     updated_at TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 
--- Создание таблицы заявок
+-- Создание таблицы заявок (оценка кредитоспособности)
 CREATE TABLE IF NOT EXISTS applications (
-    id VARCHAR(50) PRIMARY KEY,
-    user_id INTEGER NOT NULL,
+    id SERIAL PRIMARY KEY,
     status VARCHAR(50) NOT NULL DEFAULT 'draft',
     created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW(),
     formed_at TIMESTAMP WITH TIME ZONE,
@@ -42,16 +41,24 @@ CREATE TABLE IF NOT EXISTS applications (
     total_amount NUMERIC(15, 2) DEFAULT 0,
     full_name VARCHAR(255),
     income NUMERIC(15, 2),
-    obligations NUMERIC(15, 2)
+    obligations NUMERIC(15, 2),
+    -- Поля для скоринговой модели оценки кредитоспособности
+    credit_score INTEGER DEFAULT 0,
+    scoring_result VARCHAR(50),
+    max_credit_amount NUMERIC(15, 2) DEFAULT 0,
+    rejection_reason TEXT
 );
 
 -- Создание таблицы связи заявок и услуг (M-M)
 CREATE TABLE IF NOT EXISTS application_products (
-    application_id VARCHAR(50) NOT NULL,
+    id SERIAL PRIMARY KEY,
+    application_id INTEGER NOT NULL,
     credit_id INTEGER NOT NULL,
-    quantity INTEGER DEFAULT 1,
-    order_num INTEGER DEFAULT 0,
-    PRIMARY KEY (application_id, credit_id),
+    requested_amount NUMERIC(15, 2) DEFAULT 0,
+    requested_term_days INTEGER DEFAULT 0,
+    monthly_payment NUMERIC(15, 2) DEFAULT 0,
+    interest_rate NUMERIC(5, 2) DEFAULT 0,
+    UNIQUE(application_id, credit_id),
     FOREIGN KEY (application_id) REFERENCES applications(id) ON DELETE CASCADE,
     FOREIGN KEY (credit_id) REFERENCES credits(id) ON DELETE CASCADE
 );
@@ -64,10 +71,6 @@ ALTER TABLE applications
 ALTER TABLE applications 
     DROP CONSTRAINT IF EXISTS fk_applications_moderator,
     ADD CONSTRAINT fk_applications_moderator FOREIGN KEY (moderator_id) REFERENCES users(id);
-
-ALTER TABLE applications 
-    DROP CONSTRAINT IF EXISTS fk_applications_user,
-    ADD CONSTRAINT fk_applications_user FOREIGN KEY (user_id) REFERENCES users(id);
 
 -- Создаем расширение для UUID (если понадобится)
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";

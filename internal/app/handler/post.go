@@ -21,11 +21,18 @@ func (h *Handler) AddToApplication(ctx *gin.Context) {
 
 	// Получаем или создаем черновик заявки
 	draft, err := h.Repository.GetDraftApplication(DefaultUserID)
-	if err != nil {
+	if err != nil || draft == nil {
 		// Создаем новую заявку в статусе черновик
 		draft, err = h.Repository.CreateDraftApplication(DefaultUserID)
 		if err != nil {
 			h.errorHandler(ctx, http.StatusInternalServerError, err)
+			return
+		}
+		if draft == nil {
+			ctx.JSON(http.StatusInternalServerError, gin.H{
+				"status":  "error",
+				"message": "failed to create draft application",
+			})
 			return
 		}
 		logrus.Infof("Создана новая заявка в статусе черновик: %d", draft.ID)
@@ -33,14 +40,25 @@ func (h *Handler) AddToApplication(ctx *gin.Context) {
 
 	// Добавляем услугу в заявку
 	if err := h.Repository.AddCreditToApplication(draft.ID, creditID); err != nil {
-		h.errorHandler(ctx, http.StatusBadRequest, err)
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"status":  "error",
+			"message": err.Error(),
+		})
 		return
 	}
 
 	logrus.Infof("Услуга %d добавлена в заявку %d", creditID, draft.ID)
 
-	// Редирект на страницу корзины
-	ctx.Redirect(http.StatusFound, "/creditapplicationbasket")
+	// Получаем обновленное количество товаров в корзине
+	count, _ := h.Repository.CountProductsInApplication(draft.ID)
+
+	// Возвращаем JSON вместо редиректа
+	ctx.JSON(http.StatusOK, gin.H{
+		"status":      "success",
+		"message":     "Услуга добавлена в заявку",
+		"cart_count":  count,
+		"application_id": draft.ID,
+	})
 }
 
 // DeleteApplication логически удаляет заявку (POST через SQL UPDATE)
@@ -68,5 +86,5 @@ func (h *Handler) DeleteApplication(ctx *gin.Context) {
 	logrus.Infof("Заявка %d логически удалена (статус изменен на deleted)", appID)
 
 	// Остаемся в корзине
-	ctx.Redirect(http.StatusFound, "/creditapplicationbasket")
+	ctx.Redirect(http.StatusFound, "/scoringapplicationbasket")
 }

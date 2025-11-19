@@ -18,7 +18,7 @@ import (
 // GetApplicationBasketAPI - GET /api/applications/basket - получить информацию о корзине
 func (h *Handler) GetApplicationBasketAPI(c *gin.Context) {
 	// Получаем текущего пользователя
-	userID := getCurrentUserID(c)
+	userID := h.getCurrentUserID(c)
 
 	// Получаем черновик заявки
 	app, err := h.Repository.GetDraftApplication(userID)
@@ -53,6 +53,17 @@ func (h *Handler) GetApplicationBasketAPI(c *gin.Context) {
 
 // GetApplicationsAPI - GET /api/applications - получить список заявок с фильтрацией
 func (h *Handler) GetApplicationsAPI(c *gin.Context) {
+	// Получаем текущего пользователя из JWT
+	userID := h.getCurrentUserID(c)
+	
+	// Проверяем является ли пользователь модератором
+	isModerator := false
+	if claims, ok := c.Get("claims"); ok {
+		if jwtClaims, ok := claims.(*ds.JWTClaims); ok {
+			isModerator = jwtClaims.IsModerator
+		}
+	}
+
 	// Получаем параметры фильтрации
 	statusFilter := c.Query("status")
 	dateFromStr := c.Query("date_from")
@@ -94,9 +105,23 @@ func (h *Handler) GetApplicationsAPI(c *gin.Context) {
 		return
 	}
 
+	// Фильтруем заявки: обычный пользователь видит только свои, модератор - все
+	var filteredApplications []ds.Application
+	if isModerator {
+		// Модератор видит все заявки
+		filteredApplications = applications
+	} else {
+		// Обычный пользователь видит только свои заявки
+		for _, app := range applications {
+			if app.CreatorID == userID {
+				filteredApplications = append(filteredApplications, app)
+			}
+		}
+	}
+
 	// Формируем ответ
 	var appResponses []ds.ApplicationResponse
-	for _, app := range applications {
+	for _, app := range filteredApplications {
 		appResp := h.buildApplicationResponse(&app)
 		appResponses = append(appResponses, appResp)
 	}
@@ -159,7 +184,7 @@ func (h *Handler) GetApplicationAPI(c *gin.Context) {
 // UpdateApplicationAPI - PUT /api/applications/:id - обновить поля заявки
 func (h *Handler) UpdateApplicationAPI(c *gin.Context) {
 	// Получаем текущего пользователя
-	userID := getCurrentUserID(c)
+	userID := h.getCurrentUserID(c)
 
 	// Получаем ID заявки
 	idStr := c.Param("id")
@@ -218,7 +243,7 @@ func (h *Handler) UpdateApplicationAPI(c *gin.Context) {
 // FormApplicationAPI - PUT /api/applications/:id/form - сформировать заявку
 func (h *Handler) FormApplicationAPI(c *gin.Context) {
 	// Получаем текущего пользователя
-	userID := getCurrentUserID(c)
+	userID := h.getCurrentUserID(c)
 
 	// Получаем ID заявки
 	idStr := c.Param("id")
@@ -252,7 +277,7 @@ func (h *Handler) FormApplicationAPI(c *gin.Context) {
 // CompleteApplicationAPI - PUT /api/applications/:id/complete - завершить/отклонить заявку модератором
 func (h *Handler) CompleteApplicationAPI(c *gin.Context) {
 	// Получаем текущего пользователя
-	userID := getCurrentUserID(c)
+	userID := h.getCurrentUserID(c)
 
 	// Проверяем, что пользователь - модератор
 	user, err := h.Repository.GetUserByID(userID)
@@ -317,7 +342,7 @@ func (h *Handler) CompleteApplicationAPI(c *gin.Context) {
 // DeleteApplicationAPI - DELETE /api/applications/:id - удалить заявку
 func (h *Handler) DeleteApplicationAPI(c *gin.Context) {
 	// Получаем текущего пользователя
-	userID := getCurrentUserID(c)
+	userID := h.getCurrentUserID(c)
 
 	// Получаем ID заявки
 	idStr := c.Param("id")
@@ -371,5 +396,11 @@ func (h *Handler) buildApplicationResponse(app *ds.Application) ds.ApplicationRe
 		Income:       app.Income,
 		Obligations:  app.Obligations,
 		TotalAmount:  app.TotalAmount,
+		
+		// Результаты оценки кредитоспособности
+		CreditScore:     app.CreditScore,
+		ScoringResult:   app.ScoringResult,
+		MaxCreditAmount: app.MaxCreditAmount,
+		RejectionReason: app.RejectionReason,
 	}
 }

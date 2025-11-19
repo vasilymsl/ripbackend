@@ -17,7 +17,7 @@ import (
 // RemoveProductFromApplicationAPI - DELETE /api/applications/:app_id/products/:credit_id - удалить продукт из заявки
 func (h *Handler) RemoveProductFromApplicationAPI(c *gin.Context) {
 	// Получаем текущего пользователя
-	userID := getCurrentUserID(c)
+	userID := h.getCurrentUserID(c)
 
 	// Получаем ID заявки и продукта
 	appIDStr := c.Param("app_id")
@@ -64,7 +64,7 @@ func (h *Handler) RemoveProductFromApplicationAPI(c *gin.Context) {
 // UpdateApplicationProductAPI - PUT /api/applications/:app_id/products/:credit_id - обновить М-М связь
 func (h *Handler) UpdateApplicationProductAPI(c *gin.Context) {
 	// Получаем текущего пользователя
-	userID := getCurrentUserID(c)
+	userID := h.getCurrentUserID(c)
 
 	// Получаем ID заявки и продукта
 	appIDStr := c.Param("app_id")

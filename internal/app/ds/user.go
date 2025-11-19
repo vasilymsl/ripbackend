@@ -9,7 +9,7 @@ type User struct {
 	Email       string `gorm:"uniqueIndex"`
 	FullName    string `gorm:"column:full_name"`
 	Phone       string
-	IsModerator bool      `gorm:"default:false"`
+	IsModerator bool      `gorm:"column:is_moderator;default:false"`
 	CreatedAt   time.Time `gorm:"autoCreateTime"`
 	UpdatedAt   time.Time `gorm:"autoUpdateTime"`
 }

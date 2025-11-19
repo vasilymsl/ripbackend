@@ -82,6 +82,13 @@ type ApplicationResponse struct {
 	Income       float64                 `json:"income"`
 	Obligations  float64                 `json:"obligations"`
 	TotalAmount  float64                 `json:"total_amount"`
+	
+	// Результаты оценки кредитоспособности
+	CreditScore     int     `json:"credit_score"`                // Кредитный скор (0-1000)
+	ScoringResult   string  `json:"scoring_result,omitempty"`    // approved/rejected/pending
+	MaxCreditAmount float64 `json:"max_credit_amount"`           // Макс. рекомендованная сумма
+	RejectionReason string  `json:"rejection_reason,omitempty"`  // Причина отклонения
+	
 	Products     []ApplicationProductDTO `json:"products,omitempty"`
 }
 
@@ -142,11 +149,12 @@ type UpdateApplicationProductRequest struct {
 
 // UserRegisterRequest - запрос на регистрацию пользователя
 type UserRegisterRequest struct {
-	Username string `json:"username" binding:"required,min=3,max=50"`
-	Password string `json:"password" binding:"required,min=6"`
-	Email    string `json:"email" binding:"required,email"`
-	FullName string `json:"full_name"`
-	Phone    string `json:"phone"`
+	Username    string `json:"username" binding:"required,min=3,max=50"`
+	Password    string `json:"password" binding:"required,min=6"`
+	Email       string `json:"email" binding:"required,email"`
+	FullName    string `json:"full_name"`
+	Phone       string `json:"phone"`
+	IsModerator bool   `json:"is_moderator"`
 }
 
 // UserLoginRequest - запрос на аутентификацию

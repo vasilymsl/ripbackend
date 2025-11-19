@@ -151,6 +151,126 @@ header h1 {
     font-size: 24px;
 }
 
+/* Простой блок "Ваша заявка" для черновиков */
+.summary-section {
+    margin-top: 40px;
+    padding: 35px;
+    background: #FFFFFF;
+    border-radius: 12px;
+    border: 3px solid #1a3453;
+    box-shadow: 0px 4px 12px rgba(26, 52, 83, 0.15);
+}
+
+.summary-title {
+    font-size: 24px;
+    font-weight: 600;
+    color: #1a3453;
+    margin-bottom: 20px;
+}
+
+.summary-content {
+    margin-bottom: 20px;
+}
+
+.summary-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 0;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.summary-label {
+    font-size: 20px;
+    color: #333;
+}
+
+.summary-value {
+    font-size: 28px;
+    font-weight: 700;
+    color: #ef3124;
+}
+
+.summary-note {
+    font-size: 16px;
+    color: #666;
+    line-height: 1.6;
+    margin: 15px 0 0 0;
+}
+
+/* Блок результатов для оформленных заявок */
+.result-highlight {
+    display: flex;
+    gap: 40px;
+    padding: 30px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 12px;
+    margin-bottom: 20px;
+}
+
+.result-score {
+    text-align: center;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 10px;
+    min-width: 180px;
+}
+
+.score-number {
+    font-size: 64px;
+    font-weight: 700;
+    color: #667eea;
+    line-height: 1;
+}
+
+.score-label {
+    font-size: 16px;
+    color: #666;
+    margin-top: 10px;
+}
+
+.result-decision {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 15px;
+    color: #FFFFFF;
+}
+
+.decision-approved,
+.decision-rejected,
+.decision-pending {
+    font-size: 32px;
+    font-weight: 600;
+}
+
+.decision-approved {
+    color: #4caf50;
+}
+
+.decision-rejected {
+    color: #f44336;
+}
+
+.decision-pending {
+    color: #ffc107;
+}
+
+.max-amount {
+    font-size: 20px;
+    font-weight: 500;
+}
+
+.rejection-note {
+    padding: 20px;
+    background: #fff3cd;
+    border-left: 4px solid #ffc107;
+    border-radius: 8px;
+    font-size: 16px;
+    line-height: 1.6;
+}
+
 .result-info {
     font-size: 16px;
     line-height: 1.8;
@@ -284,21 +404,22 @@ header h1 {
     gap: 14px;
     padding: 0 40px;
     justify-content: center;
-    align-items: flex-start;
+    align-items: center;
     width: 100%;
+    text-align: center;
 }
 
 .product-conditions p {
-    font-size: 18px;
+    font-size: 22px;
     color: #000000;
     line-height: 1.6;
     margin: 0;
-    text-align: left;
+    text-align: center;
     width: 100%;
 }
 
 .product-payment {
-    font-size: 20px;
+    font-size: 22px;
     font-weight: 400;
     color: #000000;
     text-align: center;
@@ -370,4 +491,180 @@ header h1 {
 
 .error a:hover {
     background: #d42a1e;
+}
+
+/* =============================================
+   СТИЛИ ДЛЯ БЛОКА ОЦЕНКИ КРЕДИТОСПОСОБНОСТИ
+   ============================================= */
+
+.scoring-section {
+    margin-top: 50px;
+    padding: 40px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 15px;
+    box-shadow: 0px 8px 30px rgba(102, 126, 234, 0.3);
+}
+
+.scoring-section .section-title {
+    color: #FFFFFF;
+    font-size: 32px;
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+.scoring-result-card {
+    background: #FFFFFF;
+    border-radius: 12px;
+    padding: 40px;
+    box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.scoring-main {
+    display: flex;
+    gap: 50px;
+    margin-bottom: 40px;
+    padding-bottom: 40px;
+    border-bottom: 2px solid #E0E0E0;
+}
+
+.credit-score-container {
+    flex: 0 0 250px;
+    text-align: center;
+    padding: 30px;
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    border-radius: 12px;
+    box-shadow: inset 0px 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.score-label {
+    font-size: 18px;
+    color: #666;
+    margin-bottom: 15px;
+    font-weight: 500;
+}
+
+.score-value {
+    font-size: 72px;
+    font-weight: 700;
+    margin: 10px 0;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.score-approved {
+    color: #28a745;
+}
+
+.score-rejected {
+    color: #dc3545;
+}
+
+.score-pending {
+    color: #ffc107;
+}
+
+.score-max {
+    font-size: 16px;
+    color: #999;
+    margin-top: 5px;
+}
+
+.scoring-decision {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.decision-badge {
+    display: inline-block;
+    padding: 15px 30px;
+    border-radius: 10px;
+    font-size: 26px;
+    font-weight: 600;
+    text-align: center;
+    box-shadow: 0px 3px 10px rgba(0, 0, 0, 0.15);
+}
+
+.decision-approved {
+    background: #28a745;
+    color: #FFFFFF;
+}
+
+.decision-rejected {
+    background: #dc3545;
+    color: #FFFFFF;
+}
+
+.decision-pending {
+    background: #ffc107;
+    color: #000000;
+}
+
+.max-credit-info {
+    padding: 20px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    border-left: 4px solid #667eea;
+}
+
+.info-label {
+    font-size: 16px;
+    color: #666;
+    margin-bottom: 8px;
+}
+
+.info-value {
+    font-size: 28px;
+    font-weight: 600;
+    color: #000000;
+}
+
+.rejection-reason {
+    padding: 20px;
+    background: #fff3cd;
+    border-left: 4px solid #ffc107;
+    border-radius: 8px;
+    font-size: 16px;
+    line-height: 1.6;
+}
+
+.scoring-details {
+    padding: 30px;
+    background: #f8f9fa;
+    border-radius: 10px;
+}
+
+.scoring-details h3 {
+    font-size: 22px;
+    color: #000000;
+    margin-bottom: 20px;
+    font-weight: 600;
+}
+
+.detail-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 12px 0;
+    border-bottom: 1px solid #dee2e6;
+    font-size: 18px;
+}
+
+.detail-row:last-child {
+    border-bottom: none;
+}
+
+.detail-row.total {
+    margin-top: 10px;
+    padding-top: 20px;
+    border-top: 2px solid #667eea;
+    font-weight: 600;
+}
+
+.detail-label {
+    color: #666;
+}
+
+.detail-value {
+    font-weight: 600;
+    color: #000000;
 }

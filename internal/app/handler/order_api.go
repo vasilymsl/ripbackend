@@ -370,7 +370,7 @@ func (h *Handler) UploadOrderImageAPI(c *gin.Context) {
 // AddOrderToApplicationAPI - POST /api/credits/:id/add-to-application - добавить услугу в заявку
 func (h *Handler) AddOrderToApplicationAPI(c *gin.Context) {
 	// Получаем текущего пользователя (в реальности из сессии/токена)
-	userID := getCurrentUserID(c)
+	userID := h.getCurrentUserID(c)
 
 	// Получаем ID услуги из URL
 	idParam := c.Param("id")

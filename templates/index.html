@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>Банк</title>
+    <title>Оценка кредитоспособности - Банк</title>
     <link rel="stylesheet" href="/static/styles/index_style.css?v=14">
 </head>
 <body>
@@ -11,17 +11,17 @@
             <a href="/" class="logo-link">
                 <img src="/static/img/bank-logo.svg" alt="Банк" class="logo">
             </a>
-            <h1>Банк</h1>
+            <h1>Оценка кредитоспособности</h1>
         </div>
     </header>
 
     <div class="container">
         <div class="search-container">
-            <form action="/credit-services" method="GET" class="search-form">
+            <form action="/scoring-services" method="GET" class="search-form">
                 <input type="text" name="query" placeholder="Поиск" value="{{ .query }}" class="search-input">
                 <button type="submit" class="search-button">Найти</button>
             </form>
-            <a href="/creditapplicationbasket" class="btn-applications-cart">
+            <a href="/scoringapplicationbasket" class="btn-applications-cart">
                 <svg class="cart-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M9 2L7 8H21L19 2H9Z"/>
                     <path d="M7 8L5 22H19L21 8"/>
@@ -29,7 +29,7 @@
                     <circle cx="19" cy="22" r="1"/>
                     <path d="M7 8H21M9 12H19M10 16H18"/>
                 </svg>
-                <span class="cart-label">Корзина</span>
+                <span class="cart-label">Моя заявка</span>
                 {{ if .cart_count }}
                 <span class="cart-badge">{{ .cart_count }}</span>
                 {{ end }}
@@ -51,15 +51,52 @@
                     </div>
                 </div>
                 <div class="product-actions-horizontal">
-                    <a href="/credit/{{ .ID }}" class="btn-details-horizontal">Подробнее</a>
-                    <form action="/add-to-application" method="POST" style="display:inline;">
-                        <input type="hidden" name="credit_id" value="{{ .ID }}">
-                        <button type="submit" class="btn-add-horizontal">Добавить в заявку</button>
-                    </form>
+                    <a href="/scoringmodel/{{ .ID }}" class="btn-details-horizontal">Подробнее</a>
+                    <button onclick="addToCart({{ .ID }})" class="btn-add-horizontal">Добавить в заявку</button>
                 </div>
             </div>
             {{ end }}
         </div>
     </div>
+
+    <script>
+    function addToCart(creditId) {
+        const button = event.target;
+        button.disabled = true;
+
+        fetch('/add-to-application', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: 'credit_id=' + creditId
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'success') {
+                // Обновляем счетчик корзины
+                const badge = document.querySelector('.cart-badge');
+                if (badge) {
+                    badge.textContent = data.cart_count;
+                } else if (data.cart_count > 0) {
+                    // Создаем badge если его нет
+                    const cartLink = document.querySelector('.btn-applications-cart');
+                    const newBadge = document.createElement('span');
+                    newBadge.className = 'cart-badge';
+                    newBadge.textContent = data.cart_count;
+                    cartLink.appendChild(newBadge);
+                }
+                
+                button.disabled = false;
+            } else {
+                button.disabled = false;
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            button.disabled = false;
+        });
+    }
+    </script>
 </body>
 </html>

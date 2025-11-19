@@ -1,10 +1,10 @@
-# Конфигурация веб-сервера
+# Конфигурация веб-сервера для Docker
 ServiceHost = "0.0.0.0"
 ServicePort = 8080
 
 # Конфигурация базы данных PostgreSQL
 [database]
-host = "localhost"
+host = "postgres"
 port = 5432
 user = "myuser"
 password = "mypassword"
@@ -13,7 +13,8 @@ sslmode = "disable"
 
 # Конфигурация MinIO
 [minio]
-endpoint = "localhost:9000"
+endpoint = "nginx:9000"
+public_endpoint = "localhost:9000"
 access_key = "minio"
 secret_key = "minio124"
 use_ssl = false
@@ -26,9 +27,9 @@ expires_in = "24h"  # Время жизни токена (24 часа)
 
 # Конфигурация Redis
 [redis]
-host = "localhost"
+host = "redis"
 port = 6379
-password = ""
+password = "password"
 db = 0
 dial_timeout = "10s"
 read_timeout = "10s"

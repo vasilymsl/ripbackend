@@ -49,6 +49,29 @@ services:
     depends_on:
       - postgres
 
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: lab3-app
+    ports:
+      - "8080:8080"
+    environment:
+      CONFIG_NAME: config-docker
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_USER: myuser
+      DB_PASS: mypassword
+      DB_NAME: credits
+      MINIO_ENDPOINT: nginx:9000
+      MINIO_ACCESS_KEY: minio
+      MINIO_SECRET_KEY: minio124
+      MINIO_USE_SSL: "false"
+    depends_on:
+      - postgres
+      - nginx
+    restart: unless-stopped
+
   minio1:
     <<: *minio-common
     hostname: minio1 # указываем что адрес внутри подсети docker будет http://minio1:9000/ и на порту 9001 для админки соотвественно

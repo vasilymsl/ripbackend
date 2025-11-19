@@ -27,6 +27,12 @@ type Application struct {
 	Obligations float64 `gorm:"not null"`                  // Обязательства обязательно (число!)
 	TotalAmount float64 `gorm:"default:0"`                 // Рассчитываемое поле при завершении
 
+	// Поля скоринговой модели оценки кредитоспособности
+	CreditScore      int     `gorm:"column:credit_score;default:0"`       // Кредитный скор (0-1000)
+	ScoringResult    string  `gorm:"column:scoring_result"`               // approved/rejected/pending
+	MaxCreditAmount  float64 `gorm:"column:max_credit_amount;default:0"`  // Макс. рекомендованная сумма
+	RejectionReason  string  `gorm:"column:rejection_reason"`             // Причина отклонения
+
 	Products []ApplicationProduct `gorm:"foreignKey:ApplicationID"`
 }
 

@@ -1,0 +1,266 @@
+basePath: /api
+definitions:
+  ds.ErrorResponse:
+    properties:
+      message:
+        type: string
+      status:
+        type: string
+    type: object
+  ds.SuccessResponse:
+    properties:
+      data: {}
+      message:
+        type: string
+      status:
+        type: string
+    type: object
+  ds.UserLoginRequest:
+    properties:
+      password:
+        type: string
+      username:
+        type: string
+    required:
+    - password
+    - username
+    type: object
+  ds.UserRegisterRequest:
+    properties:
+      email:
+        type: string
+      full_name:
+        type: string
+      password:
+        minLength: 6
+        type: string
+      phone:
+        type: string
+      username:
+        maxLength: 50
+        minLength: 3
+        type: string
+    required:
+    - email
+    - password
+    - username
+    type: object
+  ds.UserResponse:
+    properties:
+      created_at:
+        type: string
+      email:
+        type: string
+      full_name:
+        type: string
+      id:
+        type: integer
+      is_moderator:
+        type: boolean
+      phone:
+        type: string
+      username:
+        type: string
+    type: object
+  ds.UserUpdateRequest:
+    properties:
+      email:
+        type: string
+      full_name:
+        type: string
+      password:
+        minLength: 6
+        type: string
+      phone:
+        type: string
+    type: object
+host: localhost:8080
+info:
+  contact:
+    email: support@example.com
+    name: API Support
+    url: http://example.com/support
+  description: API для системы скоринга и управления кредитными заявками
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+  termsOfService: http://swagger.io/terms/
+  title: Lab4 Scoring Service API
+  version: "1.0"
+paths:
+  /users/login:
+    post:
+      consumes:
+      - application/json
+      description: Выполняет вход пользователя в систему и возвращает JWT токен
+      parameters:
+      - description: Учетные данные
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/ds.UserLoginRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Успешная аутентификация
+          schema:
+            properties:
+              data:
+                properties:
+                  access_token:
+                    type: string
+                  expires_in:
+                    type: integer
+                  token_type:
+                    type: string
+                  user:
+                    $ref: '#/definitions/ds.UserResponse'
+                type: object
+              message:
+                type: string
+              status:
+                type: string
+            type: object
+        "400":
+          description: Некорректные данные
+          schema:
+            $ref: '#/definitions/ds.ErrorResponse'
+        "401":
+          description: Неверные учетные данные
+          schema:
+            $ref: '#/definitions/ds.ErrorResponse'
+        "500":
+          description: Внутренняя ошибка сервера
+          schema:
+            $ref: '#/definitions/ds.ErrorResponse'
+      summary: Аутентификация пользователя
+      tags:
+      - Users
+  /users/logout:
+    post:
+      consumes:
+      - application/json
+      description: Завершает сессию пользователя и добавляет токен в blacklist
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Успешный выход
+          schema:
+            $ref: '#/definitions/ds.SuccessResponse'
+        "401":
+          description: Требуется авторизация
+          schema:
+            $ref: '#/definitions/ds.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Выход из системы
+      tags:
+      - Users
+  /users/profile:
+    get:
+      consumes:
+      - application/json
+      description: Возвращает профиль текущего авторизованного пользователя
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Профиль пользователя
+          schema:
+            $ref: '#/definitions/ds.UserResponse'
+        "401":
+          description: Требуется авторизация
+          schema:
+            $ref: '#/definitions/ds.ErrorResponse'
+        "404":
+          description: Пользователь не найден
+          schema:
+            $ref: '#/definitions/ds.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Получить профиль пользователя
+      tags:
+      - Users
+    put:
+      consumes:
+      - application/json
+      description: Обновляет данные профиля текущего пользователя
+      parameters:
+      - description: Данные для обновления
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/ds.UserUpdateRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Профиль успешно обновлен
+          schema:
+            $ref: '#/definitions/ds.SuccessResponse'
+        "400":
+          description: Некорректные данные
+          schema:
+            $ref: '#/definitions/ds.ErrorResponse'
+        "401":
+          description: Требуется авторизация
+          schema:
+            $ref: '#/definitions/ds.ErrorResponse'
+        "404":
+          description: Пользователь не найден
+          schema:
+            $ref: '#/definitions/ds.ErrorResponse'
+        "500":
+          description: Внутренняя ошибка сервера
+          schema:
+            $ref: '#/definitions/ds.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Обновить профиль пользователя
+      tags:
+      - Users
+  /users/register:
+    post:
+      consumes:
+      - application/json
+      description: Создает нового пользователя в системе
+      parameters:
+      - description: Данные для регистрации
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/ds.UserRegisterRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Пользователь успешно зарегистрирован
+          schema:
+            $ref: '#/definitions/ds.SuccessResponse'
+        "400":
+          description: Некорректные данные
+          schema:
+            $ref: '#/definitions/ds.ErrorResponse'
+        "409":
+          description: Пользователь уже существует
+          schema:
+            $ref: '#/definitions/ds.ErrorResponse'
+        "500":
+          description: Внутренняя ошибка сервера
+          schema:
+            $ref: '#/definitions/ds.ErrorResponse'
+      summary: Регистрация нового пользователя
+      tags:
+      - Users
+securityDefinitions:
+  BearerAuth:
+    description: 'JWT токен в формате: Bearer {token}'
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"
