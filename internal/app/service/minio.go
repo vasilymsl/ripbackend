@@ -152,6 +152,15 @@ func (s *MinioService) GetFileURL(folder, fileName string) string {
 	if fileName == "" {
 		return ""
 	}
+	
+	// Если fileName уже полный URL (начинается с http:// или https://), возвращаем как есть
+	if len(fileName) >= 7 && fileName[:7] == "http://" {
+		return fileName
+	}
+	if len(fileName) >= 8 && fileName[:8] == "https://" {
+		return fileName
+	}
+	
 	objectName := fileName
 	if folder != "" {
 		objectName = fmt.Sprintf("%s/%s", folder, fileName)

@@ -4,12 +4,14 @@ INSERT INTO users (username, password, is_moderator) VALUES
 ('moderator', 'modpass123', true);
 
 -- Заполнение таблицы credits (кредитные продукты)
-INSERT INTO credits (title, icon, image_url, rate, term, amount, description, status) VALUES
-('Потребительский кредит', 'percent', 'http://localhost:9000/images/%20credit/1.jpg', 'Ставка: от 17.9% годовых', 'Срок: до 36 мес', 'Сумма: до 1 000 000 ₽', 'Пользовательский кредит — универсальный продукт, который можно оформить на любые личные нужды без залога и поручителей.', 'active'),
-('Кредит наличными', 'wallet', 'http://localhost:9000/images/%20credit/2.jpg', 'Ставка: от 15.9% годовых', 'Срок: до 60 мес', 'Сумма: до 3 000 000 ₽', 'Кредит наличными — быстрое решение для получения денежных средств на карту или наличными.', 'active'),
-('Кредит под залог на любые цели', 'bank', 'http://localhost:9000/images/%20credit/3.jpg', 'Ставка: от 12.5% годовых', 'Срок: до 15 лет', 'Сумма: до 30 000 000 ₽', 'Кредит под залог недвижимости — выгодное решение для получения крупной суммы на длительный срок.', 'active'),
-('Кредитная карта', 'card', 'http://localhost:9000/images/%20credit/4.jpg', 'Ставка: от 19.9% годовых', 'Льготный период: до 60 дней', 'Лимит: до 600 000 ₽', 'Кредитная карта — удобный инструмент для ежедневных покупок и непредвиденных расходов.', 'active'),
-('Автокредит', 'car', 'http://localhost:9000/images/%20credit/5.webp', 'Ставка: от 16.5% годовых', 'Срок: до 60 мес', 'Сумма: до 5 000 000 ₽', 'Автокредит — специальное предложение для покупки нового или подержанного автомобиля.', 'active');
+-- Поля: title, icon, image_url, type, sum_from, sum_to, percent, term_from, term_to
+INSERT INTO credits (title, icon, image_url, type, sum_from, sum_to, percent, term_from, term_to) VALUES
+('Потребительский кредит', 'percent', 'https://via.placeholder.com/400x300/1e3a5f/ffffff?text=Potrebitelskiy+Kredit', 'consumer', 50000, 1000000, 17.90, 6, 36),
+('Кредит наличными', 'wallet', 'https://via.placeholder.com/400x300/2c5aa0/ffffff?text=Kredit+Nalichnymi', 'cash', 100000, 3000000, 15.90, 12, 60),
+('Кредит под залог', 'bank', 'https://via.placeholder.com/400x300/3a6fb0/ffffff?text=Kredit+Pod+Zalog', 'secured', 500000, 30000000, 12.50, 12, 180),
+('Кредитная карта', 'card', 'https://via.placeholder.com/400x300/4a7fc1/ffffff?text=Kreditnaya+Karta', 'card', 30000, 600000, 19.90, 1, 60),
+('Автокредит', 'car', 'https://via.placeholder.com/400x300/5a8fd1/ffffff?text=Avtokredit', 'auto', 200000, 5000000, 16.50, 12, 60),
+('Ипотека', 'home', 'https://via.placeholder.com/400x300/6a9fe2/ffffff?text=Ipoteka', 'mortgage', 1000000, 50000000, 8.50, 60, 360);
 
 -- Заполнение таблицы applications (заявки)
 TRUNCATE TABLE applications RESTART IDENTITY CASCADE;
