@@ -1,0 +1,101 @@
+╔═══════════════════════════════════════════════════════════════╗
+║                 ШПАРГАЛКА ДЛЯ ОТВЕТОВ                         ║
+╚═══════════════════════════════════════════════════════════════╝
+
+═══════════════════════════════════════════════════════════════
+  1. "ГДЕ ЗАГОЛОВОК ВРУЧНУЮ В INSOMNIA?"
+═══════════════════════════════════════════════════════════════
+
+ОТВЕТ:
+  "В Insomnia я открываю вкладку Header (не Auth!), 
+   нажимаю Add Header и вручную ввожу:
+   
+   Authorization: Bearer {токен}
+   
+   Токен получаю из ответа POST /api/users/login"
+
+ПОКАЗАТЬ:
+  ✓ Вкладку Header в Insomnia
+  ✓ Ручной ввод поля Authorization
+  ✓ Формат с "Bearer " перед токеном
+
+═══════════════════════════════════════════════════════════════
+  2. "JWT ГДЕ В REDIS? JWT ЗАЧЕМ СЕССИЯ?"
+═══════════════════════════════════════════════════════════════
+
+ОТВЕТ:
+  "JWT токены - stateless, они не хранятся на сервере.
+   Redis используется ТОЛЬКО для blacklist отозванных токенов.
+   
+   Сейчас покажу:
+   
+   1. Redis пустой (до logout)
+   2. Логинюсь - Redis всё ещё пустой
+   3. Делаю logout - токен попадает в blacklist
+   4. Проверяю Redis - вижу отозванный токен"
+
+ПОКАЗАТЬ В redis-cli:
+  
+  $ redis-cli
+  
+  # До logout:
+  127.0.0.1:6379> KEYS "lab4_service.*"
+  (empty array)
+  
+  # После logout:
+  127.0.0.1:6379> KEYS "lab4_service.jwt_blacklist.*"
+  1) "lab4_service.jwt_blacklist.eyJhbGc..."
+  
+  127.0.0.1:6379> GET "lab4_service.jwt_blacklist.{токен}"
+  "1"
+  
+  127.0.0.1:6379> TTL "lab4_service.jwt_blacklist.{токен}"
+  (integer) 86395
+
+КОНЦЕПЦИЯ:
+  ✓ JWT = самодостаточный токен (user_id, username, is_moderator)
+  ✓ Не требует проверки в БД при каждом запросе
+  ✓ Redis blacklist = для отзыва токенов при logout
+  ✓ TTL = время жизни JWT (24 часа)
+
+═══════════════════════════════════════════════════════════════
+  БЫСТРЫЕ КОМАНДЫ ДЛЯ ДЕМОНСТРАЦИИ
+═══════════════════════════════════════════════════════════════
+
+# Запуск приложения:
+go run cmd/lab1/main.go
+
+# Redis CLI:
+redis-cli
+KEYS "lab4_service.*"
+GET "lab4_service.jwt_blacklist.{токен}"
+TTL "lab4_service.jwt_blacklist.{токен}"
+
+# Swagger:
+http://localhost:8080/swagger/index.html
+
+# Логин (получить токен):
+POST /api/users/login
+{"username": "user1", "password": "password123"}
+
+# Logout (добавить токен в blacklist):
+POST /api/users/logout
+Authorization: Bearer {токен}
+
+═══════════════════════════════════════════════════════════════
+  ИЗМЕНЕНИЯ В КОДЕ (ДЛЯ ОБЪЯСНЕНИЯ)
+═══════════════════════════════════════════════════════════════
+
+УДАЛЕНО:
+  ❌ h.RedisClient.SaveSession() в LoginUserAPI
+  ❌ Сохранение JWT в Redis при авторизации
+
+ОСТАВЛЕНО:
+  ✓ h.RedisClient.WriteJWTToBlacklist() в LogoutUserAPI
+  ✓ h.RedisClient.CheckJWTInBlacklist() в middleware
+
+ФАЙЛ:
+  internal/app/handler/user_api.go (строка 145-152)
+
+═══════════════════════════════════════════════════════════════
+

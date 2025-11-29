@@ -32,8 +32,8 @@ func (h *Handler) GetOrders(ctx *gin.Context) {
 	for i := range orders {
 		orders[i].PopulateCompatibilityFields()
 		// Формируем полный URL изображения из MinIO
-		if orders[i].Icon != "" {
-			orders[i].ImageURL = h.MinioService.GetFileURL("", orders[i].Icon)
+		if orders[i].ImageURL != "" {
+			orders[i].ImageURL = h.MinioService.GetFileURL("credits", orders[i].ImageURL)
 		}
 	}
 

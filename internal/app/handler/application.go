@@ -30,11 +30,11 @@ func (h *Handler) GetApplications(ctx *gin.Context) {
 		}
 		// Заполняем поля для таблицы (короткие значения)
 		for i := range appPtr.Products {
-			appPtr.Products[i].Order.PopulateForTable()
-			// Формируем полный URL изображения из MinIO
-			if appPtr.Products[i].Order.Icon != "" {
-				appPtr.Products[i].Order.ImageURL = h.MinioService.GetFileURL("", appPtr.Products[i].Order.Icon)
-			}
+		appPtr.Products[i].Order.PopulateForTable()
+		// Формируем полный URL изображения из MinIO
+		if appPtr.Products[i].Order.ImageURL != "" {
+			appPtr.Products[i].Order.ImageURL = h.MinioService.GetFileURL("credits", appPtr.Products[i].Order.ImageURL)
+		}
 		}
 		ctx.HTML(http.StatusOK, "applications.html", gin.H{
 			"application": *appPtr,
@@ -54,11 +54,11 @@ func (h *Handler) GetApplications(ctx *gin.Context) {
 
 	// Заполняем поля для таблицы (короткие значения)
 	for i := range draft.Products {
-		draft.Products[i].Order.PopulateForTable()
-		// Формируем полный URL изображения из MinIO
-		if draft.Products[i].Order.Icon != "" {
-			draft.Products[i].Order.ImageURL = h.MinioService.GetFileURL("", draft.Products[i].Order.Icon)
-		}
+	draft.Products[i].Order.PopulateForTable()
+	// Формируем полный URL изображения из MinIO
+	if draft.Products[i].Order.ImageURL != "" {
+		draft.Products[i].Order.ImageURL = h.MinioService.GetFileURL("credits", draft.Products[i].Order.ImageURL)
+	}
 	}
 
 	ctx.HTML(http.StatusOK, "applications.html", gin.H{
