@@ -1,6 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="400" height="300" viewBox="0 0 400 300">
-  <rect width="400" height="300" fill="#1e3a5f"/>
-  <circle cx="200" cy="120" r="50" fill="#4a90e2" opacity="0.8"/>
-  <text x="200" y="200" font-family="Arial, sans-serif" font-size="24" fill="white" text-anchor="middle">Кредитный продукт</text>
-  <text x="200" y="240" font-family="Arial, sans-serif" font-size="18" fill="#a0c4ff" text-anchor="middle">Система оценки кредитоспособности</text>
-</svg>
