@@ -144,14 +144,10 @@ func (h *Handler) LoginUserAPI(c *gin.Context) {
 
 	logrus.Infof("User logged in: username=%s, id=%d, is_moderator=%v", user.Username, user.ID, user.IsModerator)
 
-	// Сохраняем сессию в Redis
-	if err := h.RedisClient.SaveSession(c.Request.Context(), tokenString, user.ID, h.Config.JWT.ExpiresIn); err != nil {
-		logrus.Errorf("Failed to save session to Redis: %v", err)
-	} else {
-		logrus.Infof("Session saved to Redis for user %d", user.ID)
-	}
+	// JWT токен stateless - сессия в Redis не нужна
+	// Redis используется только для blacklist (отзыв токенов при logout)
 
-	// Также сохраняем токен в cookie для удобства (опционально)
+	// Сохраняем токен в cookie для браузера
 	c.SetCookie("auth_token", tokenString, int(h.Config.JWT.ExpiresIn.Seconds()), "/", "", false, true)
 
 	// Формируем ответ
