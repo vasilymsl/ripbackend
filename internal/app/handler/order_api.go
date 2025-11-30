@@ -31,7 +31,7 @@ func (h *Handler) GetOrdersAPI(c *gin.Context) {
 	for _, order := range orders {
 		imageURL := ""
 		if order.ImageURL != "" {
-			imageURL = h.MinioService.GetFileURL("credits", order.ImageURL)
+			imageURL = h.MinioService.GetFileURL("scoring", order.ImageURL)
 		}
 
 		orderResponses = append(orderResponses, ds.OrderResponse{
@@ -80,7 +80,7 @@ func (h *Handler) GetOrderAPI(c *gin.Context) {
 	// Формируем URL изображения
 	imageURL := ""
 	if order.ImageURL != "" {
-		imageURL = h.MinioService.GetFileURL("credits", order.ImageURL)
+		imageURL = h.MinioService.GetFileURL("scoring", order.ImageURL)
 	}
 
 	response := ds.OrderResponse{
@@ -229,7 +229,7 @@ func (h *Handler) UpdateOrderAPI(c *gin.Context) {
 	// Формируем URL изображения
 	imageURL := ""
 	if existing.ImageURL != "" {
-		imageURL = h.MinioService.GetFileURL("credits", existing.ImageURL)
+		imageURL = h.MinioService.GetFileURL("scoring", existing.ImageURL)
 	}
 
 	c.JSON(http.StatusOK, ds.SuccessResponse{
@@ -354,7 +354,7 @@ func (h *Handler) UploadOrderImageAPI(c *gin.Context) {
 		return
 	}
 
-	imageURL := h.MinioService.GetFileURL("credits", fileName)
+	imageURL := h.MinioService.GetFileURL("scoring", fileName)
 
 	logrus.Infof("Order image uploaded successfully: ID=%d, file=%s", id, fileName)
 

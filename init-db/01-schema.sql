@@ -14,7 +14,7 @@ CREATE TABLE IF NOT EXISTS users (
     updated_at TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 
--- Создание таблицы кредитных продуктов (услуг)
+-- Создание таблицы кредитных продуктов (услуг скоринга)
 -- ВАЖНО: image_url - TEXT (не VARCHAR) для поддержки data URI
 CREATE TABLE IF NOT EXISTS credits (
     id SERIAL PRIMARY KEY,
@@ -27,6 +27,11 @@ CREATE TABLE IF NOT EXISTS credits (
     percent NUMERIC(5, 2) NOT NULL,
     term_from INTEGER NOT NULL,
     term_to INTEGER NOT NULL,
+    description TEXT,
+    feature1 TEXT,
+    feature2 TEXT,
+    feature3 TEXT,
+    status VARCHAR(20) DEFAULT 'active',
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
     updated_at TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );

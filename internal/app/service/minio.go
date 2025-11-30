@@ -161,11 +161,22 @@ func (s *MinioService) GetFileURL(folder, fileName string) string {
 		return fileName
 	}
 	
+	// Если folder указан, используем его как бакет (для scoring)
+	// Иначе используем s.bucketName (credits) и folder как подпапку
+	bucketName := s.bucketName
 	objectName := fileName
+	
 	if folder != "" {
-		objectName = fmt.Sprintf("%s/%s", folder, fileName)
+		// Если folder не содержит "/", это бакет (например "scoring")
+		// Иначе это подпапка в основном бакете
+		if folder == "scoring" {
+			bucketName = folder
+		} else {
+			objectName = fmt.Sprintf("%s/%s", folder, fileName)
+		}
 	}
-	return fmt.Sprintf("http://%s/%s/%s", s.publicEndpoint, s.bucketName, objectName)
+	
+	return fmt.Sprintf("http://%s/%s/%s", s.publicEndpoint, bucketName, objectName)
 }
 
 // GetPresignedURL возвращает временную предподписанную ссылку на файл

@@ -31,9 +31,9 @@ func (h *Handler) GetOrders(ctx *gin.Context) {
 	// Заполняем поля совместимости для шаблонов
 	for i := range orders {
 		orders[i].PopulateCompatibilityFields()
-		// Формируем полный URL изображения из MinIO
+		// Формируем полный URL изображения из MinIO (бакет scoring)
 		if orders[i].ImageURL != "" {
-			orders[i].ImageURL = h.MinioService.GetFileURL("credits", orders[i].ImageURL)
+			orders[i].ImageURL = h.MinioService.GetFileURL("scoring", orders[i].ImageURL)
 		}
 	}
 
@@ -70,7 +70,7 @@ func (h *Handler) GetOrder(ctx *gin.Context) {
 	
 	// Формируем полный URL изображения из MinIO
 	if order.ImageURL != "" {
-		order.ImageURL = h.MinioService.GetFileURL("credits", order.ImageURL)
+		order.ImageURL = h.MinioService.GetFileURL("scoring", order.ImageURL)
 	}
 
 	ctx.HTML(http.StatusOK, "order.html", gin.H{

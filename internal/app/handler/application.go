@@ -33,7 +33,7 @@ func (h *Handler) GetApplications(ctx *gin.Context) {
 		appPtr.Products[i].Order.PopulateForTable()
 		// Формируем полный URL изображения из MinIO
 		if appPtr.Products[i].Order.ImageURL != "" {
-			appPtr.Products[i].Order.ImageURL = h.MinioService.GetFileURL("credits", appPtr.Products[i].Order.ImageURL)
+			appPtr.Products[i].Order.ImageURL = h.MinioService.GetFileURL("scoring", appPtr.Products[i].Order.ImageURL)
 		}
 		}
 		ctx.HTML(http.StatusOK, "applications.html", gin.H{
@@ -57,7 +57,7 @@ func (h *Handler) GetApplications(ctx *gin.Context) {
 	draft.Products[i].Order.PopulateForTable()
 	// Формируем полный URL изображения из MinIO
 	if draft.Products[i].Order.ImageURL != "" {
-		draft.Products[i].Order.ImageURL = h.MinioService.GetFileURL("credits", draft.Products[i].Order.ImageURL)
+		draft.Products[i].Order.ImageURL = h.MinioService.GetFileURL("scoring", draft.Products[i].Order.ImageURL)
 	}
 	}
 

@@ -162,7 +162,7 @@ func (h *Handler) GetApplicationAPI(c *gin.Context) {
 	for _, p := range app.Products {
 		imageURL := ""
 		if p.Order.ImageURL != "" {
-			imageURL = h.MinioService.GetFileURL("credits", p.Order.ImageURL)
+			imageURL = h.MinioService.GetFileURL("scoring", p.Order.ImageURL)
 		}
 
 		products = append(products, ds.ApplicationProductDTO{
